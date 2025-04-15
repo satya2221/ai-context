@@ -24,3 +24,12 @@ class PromptManager:
             model=self.model, messages=self.messages 
         )
         return response.choices[0].message.content
+    
+    def generate_structure(self, schema):
+        response = client.beta.chat.completions.parse(
+            model=self.model,
+            messages=self.messages,
+            response_format=schema
+        )
+        result = response.choices[0].message.model_dump()
+        return result
