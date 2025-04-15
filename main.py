@@ -1,8 +1,4 @@
-import os
-from openai import OpenAI
-from dotenv import load_dotenv
-
-load_dotenv()
+from pm import PromptManager
 
 CONTEXT = """
 Q1: What is Devscale Indonesia?
@@ -12,27 +8,15 @@ Q2: What is Devscale Indonesia's core mission?
 A: Our mission is to bridge the tech talent gap in Indonesia by providing high-quality, accessible, and industry-relevant software engineering education. We aim to empower individuals from diverse backgrounds to build successful careers in technology and contribute to Indonesia's digital economy.
 """
 
-
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-
-client = OpenAI(api_key=OPENAI_API_KEY)
-
-messages = [
-	{'role':'system', 'content': f'Answer the user query based on this text only:{CONTEXT}'},
-]
+pm = PromptManager()
 
 while True:
 	input_query = input("Query: ")
-	messages.append({'role':'user', 'content': input_query})
+	pm.add_message("system", f'Answer the user query based on this text only:{CONTEXT}')
+	pm.add_message("user", input_query)
+
+	result = pm.generate()
+	print(result)
+
+	pm.add_message("assistant", result)
 	
-	response = client.chat.completions.create(
-    model="gpt-4o-mini", messages=messages 
-	)
-	content = response.choices[0].message.content
-	
-	print(content)
-	print("--------")
-	messages.append({'role': 'assistant', 'content': content})
-	
-	print(messages)
-	print("--------")
