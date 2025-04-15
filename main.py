@@ -19,13 +19,20 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 
 messages = [
 	{'role':'system', 'content': f'Answer the user query based on this text only:{CONTEXT}'},
-	{'role':'user', 'content': 'Do you know devscale Indonesia?'}
 ]
 
-response = client.chat.completions.create(
-    model="gpt-4o-mini", messages=messages
-)
-
-content = response.choices[0].message.content
-
-print(content)
+while True:
+	input_query = input("Query: ")
+	messages.append({'role':'user', 'content': input_query})
+	
+	response = client.chat.completions.create(
+    model="gpt-4o-mini", messages=messages 
+	)
+	content = response.choices[0].message.content
+	
+	print(content)
+	print("--------")
+	messages.append({'role': 'assistant', 'content': content})
+	
+	print(messages)
+	print("--------")
