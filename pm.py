@@ -1,4 +1,5 @@
 import os
+import json
 
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -31,5 +32,6 @@ class PromptManager:
             messages=self.messages,
             response_format=schema
         )
-        result = response.choices[0].message.model_dump()
-        return result
+        result = response.choices[0].message.model_dump()  # ubah bentuk awal menjadi json lagi
+        content = json.loads(result["content"])
+        return content

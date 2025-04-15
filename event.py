@@ -11,6 +11,9 @@ def run():
     pm.add_message("user", "I'd like to have meeting with Julia at Wednesday 2pm")
 
     result = pm.generate_structure(AnalyzeEvent)
+    is_event = result.get("is_event")
+    confidence_score = result.get("confident_score")
+
     print(result)
 
 if __name__ == "__main__":
