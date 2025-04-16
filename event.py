@@ -13,9 +13,9 @@ class EventDetail(BaseModel):
     datetime: str = Field(description="Date time of the event")
     duration: str = Field(description="Duration of the event")
 
-def analyze_event():
+def analyze_event(query):
     pm = PromptManager()
-    pm.add_message("user", "I'd like to have meeting with Julia at Wednesday 2pm")
+    pm.add_message("user", query)
 
     result = pm.generate_structure(AnalyzeEvent)
     is_event = result.get("is_event")
@@ -34,7 +34,8 @@ def extract_event(query):
     print(result)
 
 def run():
-    is_event, description, confidence_score = analyze_event()
+    input_query = input("Query: ")
+    is_event, description, confidence_score = analyze_event(input_query)
     
     if is_event and confidence_score > 0.7:
         extract_event(description)
